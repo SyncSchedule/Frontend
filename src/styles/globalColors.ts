@@ -9,4 +9,8 @@ export const colors = {
 
     black: '#000000',
     white: '#FFFFFF',
+
+    borderGrey: '#A6A6A6',
+    textGrey: '#CDCDCD',
+    placeHolderGrey:'#F5F5F5',
 };
