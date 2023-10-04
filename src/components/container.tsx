@@ -1,8 +1,7 @@
 //
 //공통적으로 쓰이는 Container
 // 
-
-import React, { CSSProperties, ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 import { View, StyleSheet, ViewStyle } from "react-native";
 
