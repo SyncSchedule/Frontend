@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { colors } from "~/styles/globalColors";
 import { fonts } from "~/styles/globalFonts";
+import { rh, rw, rf} from "~/styles/globalSizes";
 
 
 interface BasicTextInputProps {
@@ -17,6 +18,7 @@ interface BasicTextInputProps {
     inputStyle?: TextStyle;
     password?: boolean;
     dark?: boolean;
+    placeholder?:string;
 }
 
 interface LabelTextInputProps {
@@ -72,16 +74,16 @@ export const LabelTextInput = (props: LabelTextInputProps) => {
 
 const styles = StyleSheet.create({
     input: {
-        height: 50,
-        padding: 12,
+        height: rf(50),
+        padding: rw(12),
 
         borderRadius: 10,
-        marginVertical: 6,
+        marginVertical: rh(6),
     },
 
     light: {
         backgroundColor: colors.white,
-        borderWidth: 1,
+        borderWidth: rw(1),
         borderColor: colors.textGrey,
     },
 
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
 
     labelText: {
         fontFamily: fonts.bold,
-        fontSize: 20,
+        fontSize: rf(20),
         color: colors.black,
     },
 });

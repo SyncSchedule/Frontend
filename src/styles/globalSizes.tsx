@@ -1,11 +1,15 @@
 //
 // size scaling
 //
+import { Dimensions } from "react-native";
+
 import {
     responsiveScreenWidth,
     responsiveScreenHeight,
     responsiveScreenFontSize
 } from "react-native-responsive-dimensions";
+
+export const { width: dWidth, height: dHeight } = Dimensions.get("window");
 
 const FIGMA_WINDOW_WIDTH = 390;
 const FIGMA_WINDOW_HEIGHT = 844;
