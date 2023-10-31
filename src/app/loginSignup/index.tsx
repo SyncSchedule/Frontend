@@ -3,18 +3,39 @@
 //
 import React from "react";
 
-import { Button } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 
 import { RootView } from "~/components/container";
+import { Button } from "~/components/Button";
+
+import { rh, rw } from "~/styles/globalSizes";
+
+const LOGO = require('~/assets/Logo.png');
 
 const LoginSignup = () => {
     return (
-        <RootView>
-            <Button title="로그인" onPress={() => router.push('/loginSignup/Login')} />
-            <Button title="회원가입" onPress={() => router.push('/loginSignup/Signup')} />
+        <RootView viewStyle={styles.container}>
+            <Image source={LOGO} />
+
+            <View style={styles.btnView}>
+                <Button title="로그인" color="dark" onPress={() => router.push('/loginSignup/Login')} width={rw(320)} />
+                <Button title="회원가입" color="dark" onPress={() => router.push('/loginSignup/Signup')} width={rw(320)} />
+            </View>
         </RootView>
     );
 }
 
 export default LoginSignup;
+
+const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        paddingTop: rh(339),
+    },
+    btnView:{
+        height:rh(123),
+        justifyContent:'space-between',
+        marginTop: rh(157),
+    }
+})

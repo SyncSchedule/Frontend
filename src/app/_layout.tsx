@@ -1,8 +1,8 @@
 //
 //global layout style
 //
-import { Stack } from "expo-router";
+// import { Stack } from "expo-router";
 
-export default ()=>{
-    return <Stack />
-}
+// export default ()=>{
+//     return <Stack />
+// }
