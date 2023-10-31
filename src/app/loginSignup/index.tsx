@@ -4,7 +4,7 @@
 import React from "react";
 
 import { Image, StyleSheet, View } from "react-native";
-import { router } from "expo-router";
+import { Stack, router } from "expo-router";
 
 import { RootView } from "~/components/container";
 import { Button } from "~/components/Button";
@@ -16,8 +16,10 @@ const LOGO = require('~/assets/Logo.png');
 const LoginSignup = () => {
     return (
         <RootView viewStyle={styles.container}>
-            <Image source={LOGO} />
+            <Stack.Screen options={{ headerShown:false }}/>
 
+            <Image source={LOGO} />
+            
             <View style={styles.btnView}>
                 <Button title="로그인" color="dark" onPress={() => router.push('/loginSignup/Login')} width={rw(320)} />
                 <Button title="회원가입" color="dark" onPress={() => router.push('/loginSignup/Signup')} width={rw(320)} />
