@@ -95,8 +95,8 @@ export function ProjectContainer({project_name, members, isOngoing}: ProjectCont
   return (
     <View style={[styles.container, { backgroundColor: isOngoing ? colors.white : "#E7E7E7" }]}>
       <View>
-        <Text style={[styles.detail]}>{members.join(", ")}</Text>/*1줄 넘어가면 ...표시*/
         <Text style={[styles.title, { color: isOngoing ? colors.black : "#7A7C81" }]}>{project_name}</Text>
+        <Text style={[styles.detail]}>{members.join(", ")}</Text>
       </View>
     </View>
   )
