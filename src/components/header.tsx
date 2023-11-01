@@ -11,7 +11,7 @@ import { Href } from "expo-router/build/link/href";
 
 import { colors } from "~/styles/globalColors";
 import { fonts } from "~/styles/globalFonts";
-import { dWidth } from "~/styles/globalSizes";
+import { dWidth, rw, rh, rf } from "~/styles/globalSizes";
 
 
 interface BasicHeaderProps {
@@ -49,7 +49,7 @@ export const BasicHeader = (props: BasicHeaderProps) => {
 const styles = StyleSheet.create({
     container: {
         width: dWidth,
-        height: 60,
+        height: rh(60),
         backgroundColor: colors.white,
         flexDirection: 'row',
         alignItems: 'center',
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     },
 
     paddingBack: {
-        paddingHorizontal: 26,
+        paddingHorizontal: rw(26),
     },
 
     titleView: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 
     title: {
         color: colors.black,
-        fontSize: 25,
+        fontSize: rf(25),
         fontFamily: fonts.bold,
     },
 });
