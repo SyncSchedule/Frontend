@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
 import { colors } from "~/styles/globalColors";
+import { rw, rh, rf } from "~/styles/globalSizes";
 
 interface EventContainerHomeProps {
   project_name: string;
@@ -109,22 +110,24 @@ const styles = StyleSheet.create({
     borderColor: "#E7E7E7",
     borderRadius: 13,
     flexDirection: 'row',
-    padding: 10,
+    paddingHorizontal: rw(10),
+    paddingVertical: rh(17),
     position: 'relative',
     alignItems: 'center' 
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 15
+    fontSize: rf(15)
   },
   subTitle: {
     fontWeight: 'bold',
     color: "#7A7C81",
-    marginBottom: 5,
+    marginBottom: rh(5),
   },
   detail: {
     color: "#7A7C81",
-    marginTop: 5
+    fontSize: rf(15),
+    marginTop: rh(5)
   },
   bold: {
     fontWeight: 'bold'
@@ -134,12 +137,12 @@ const styles = StyleSheet.create({
   },
   right: {
     position: 'absolute',
-    right: 10,
+    right: rw(10),
   },
   mg_bt_5: {
-    marginBottom: 5,
+    marginBottom: rh(5),
   },
   mg_tp_5: {
-    marginTop: 5
+    marginTop: rh(5)
   }
 });
