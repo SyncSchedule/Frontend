@@ -28,17 +28,17 @@ export function EventContainerHome({
 
 type eventStatus = "not" | "done" | "ready" | "finish";
 
-interface EventContainerStatusProps {
+interface EventStatusContainerProps {
   project_name: string;
   event_name: string;
   state: eventStatus;
 }
 
-export function EventContainerStatus({
+export function EventStatusContainer({
   project_name,
   event_name,
   state
-}: EventContainerStatusProps) {
+}: EventStatusContainerProps) {
 
   const state_kor = {
     "not": "미참여",
