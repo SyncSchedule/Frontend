@@ -23,12 +23,13 @@ interface BasicTextInputProps {
 
 interface LabelTextInputProps {
     value: string;
-    onChangeText: Dispatch<SetStateAction<string>>;
+    onChangeText: (text: string) => void;//Dispatch<SetStateAction<string>>;
     label: string;
     width?: number;
     inputViewStyle?: ViewStyle;
     inputStyle?: TextStyle;
     dark?: boolean;
+    placeholder?: string;
 }
 
 
