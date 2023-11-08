@@ -15,11 +15,11 @@ import { dWidth, rw, rh, rf } from "~/styles/globalSizes";
 
 
 interface BasicHeaderProps {
-    left: string; //back, quit
+    left: "back" | "quit"; //back, quit
     leftPress: () => void;
     title: string;
     right?: string; //setting
-    rightPress?: (href: Href) => void;
+    rightPress?: () => void;
 }
 
 //기본적인 헤더 - 뒤로가기, 화면 이름, 설정 버튼 존재
@@ -29,15 +29,19 @@ export const BasicHeader = (props: BasicHeaderProps) => {
     return (
         <View style={[styles.container, styles.paddingBack]}>
             <TouchableOpacity onPress={leftPress}>
-                <MaterialIcons name={left == "quit" ? "close" : "arrow-back-ios"} size={26} color={colors.textGrey}/>
+                <MaterialIcons 
+                    name={left === "quit" ? "close" : "arrow-back-ios"} 
+                    size={rw(26)} 
+                    color={colors.textGrey}
+                />
             </TouchableOpacity>
             {title &&
                 <View style={styles.titleView}>
                     <Text style={styles.title}>{title}</Text>
                 </View>}
-            {right == 'setting' ?
+            {right === 'setting' ?
                 <TouchableOpacity onPress={rightPress}>
-                    <Ionicons name="settings-outline" size={30} color={colors.textGrey} />
+                    <Ionicons name="settings-outline" size={rw(30)} color={colors.textGrey} />
                 </TouchableOpacity>
                 : <View style={{ width: 26.3 }} />
             }
