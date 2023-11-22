@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import { router, useGlobalSearchParams } from 'expo-router'
 import uuid from 'react-native-uuid';
-import Clipboard from '@react-native-clipboard/clipboard';
+//import Clipboard from '@react-native-clipboard/clipboard';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -104,7 +104,7 @@ const ProjectDetailScreen = () => {
   function copyInvitationCode() { //초대코드 복사
     try {
       if (invitationCode) {
-        Clipboard.setString(invitationCode);
+        //Clipboard.setString(invitationCode);
         alert("초대코드가 복사되었습니다. 팀원에게 알려주세요!")
       }
     } catch (e) {
