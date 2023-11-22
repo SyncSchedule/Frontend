@@ -15,32 +15,7 @@ import { RootView } from '~/components/container'
 import { BasicHeader } from '~/components/header'
 import { rf, rh, rw } from '~/styles/globalSizes';
 import { EventContainerProject } from '~/components/ContentContainer';
-
-type Project = {
-  name: string;
-  introduction: string;
-  members: {
-    name: string;
-    isLeader: boolean;
-  }[];
-  isOngoing: boolean;
-  code?: string;
-  events: {
-    name: string;
-    isScheduled?: boolean;
-    date?: Date;
-    start?: number; //시작 시간
-    end?: number; // 종료 시간
-  }[]
-}
-
-type Event = {
-  name: string;
-    isScheduled?: boolean;
-    date?: Date;
-    start?: number; //시작 시간
-    end?: number; // 종료 시간
-}
+import { Event, Project } from '~/types/globalTypes';
 
 const ProjectDetailScreen = () => {
   const params = useGlobalSearchParams();
@@ -74,15 +49,15 @@ const ProjectDetailScreen = () => {
           name: "중간 발표 준비",
           isScheduled: true,
           date: new Date(2023,11,15),
-          start: 13,
-          end: 15
+          start: new Date(2023,11,15,13),
+          end: new Date(2023,11,15,15)
         },
         {
           name: "주제 발표 준비",
           isScheduled: true,
           date: new Date(2023,9,15),
-          start: 13,
-          end: 15
+          start: new Date(2023,11,15,13),
+          end: new Date(2023,11,15,15)
         }
       ]
     }

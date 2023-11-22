@@ -1,14 +1,16 @@
 //
 //메인화면 - 프로젝트 화면
 //
-import React from "react";
+import React, { useState } from "react";
 
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
+import { useRecoilState } from 'recoil';
 import { AntDesign } from '@expo/vector-icons';
 import { rw, rh, rf } from "~/styles/globalSizes";
 import { RootView } from "~/components/container";
 import { ProjectContainer } from "~/components/ContentContainer";
+import { projectListState } from "~/atoms/ProjectAtom";
 
 type project = {
     name: string;
@@ -17,23 +19,25 @@ type project = {
   }
 
 const ProjectScreen = () => {
-    const dummy: project[] = [
-        {
-            name: "UX 디자인",
-            members: ["김건국", "김건덕", "이쿠우", "박건우"],
-            isOngoing: true
-        },
-        {
-            name: "오픈소스SW프로젝트",
-            members: ["동동일","동동이","동동삼","동동사","동동오"],
-            isOngoing: true
-        },
-        {
-            name: "전공기초프로젝트1",
-            members: ["라이언, 제이지, 단무지"],
-            isOngoing: false
-        }
-    ];
+    const [projectList, setProjectList] = useRecoilState(projectListState);
+
+    // const dummy: project[] = [
+    //     {
+    //         name: "UX 디자인",
+    //         members: ["김건국", "김건덕", "이쿠우", "박건우"],
+    //         isOngoing: true
+    //     },
+    //     {
+    //         name: "오픈소스SW프로젝트",
+    //         members: ["동동일","동동이","동동삼","동동사","동동오"],
+    //         isOngoing: true
+    //     },
+    //     {
+    //         name: "전공기초프로젝트1",
+    //         members: ["라이언, 제이지, 단무지"],
+    //         isOngoing: false
+    //     }
+    // ];
 
     function addProject() {
         router.push('/add/project');
@@ -52,12 +56,12 @@ const ProjectScreen = () => {
                 </View>
                 <View>
                     <FlatList 
-                        data={dummy}
+                        data={projectList}
                         renderItem={({ item }) =>
                             <TouchableOpacity onPress={() => moveToProjectDetail(item.name)}>
                                 <ProjectContainer 
                                     project_name={item.name}
-                                    members={item.members}
+                                    members={item.members.map(val => val.name)}
                                     isOngoing={item.isOngoing}
                                 />
                                 <View style={styles.space}></View>

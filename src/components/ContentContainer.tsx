@@ -5,8 +5,8 @@ import { rw, rh, rf } from "~/styles/globalSizes";
 interface EventContainerHomeProps {
   project_name: string;
   event_name: string;
-  start: number;
-  end: number;
+  start: Date; //시작 시간 0-24
+  end: Date; // 종료 시간 0-24
 }
 
 export function EventContainerHome({
@@ -64,8 +64,8 @@ interface EventContainerProjectProps {
   event_name: string;
   isScheduled?: boolean;
   date?: Date;
-  start?: number;
-  end?: number;
+  start?: Date; //시작 시간
+  end?: Date; // 종료 시간
 }
 
 export function EventContainerProject({event_name, isScheduled, date, start, end}: EventContainerProjectProps) {
@@ -102,8 +102,15 @@ export function ProjectContainer({project_name, members, isOngoing}: ProjectCont
   )
 }
 
-function getKorTimeText(time: number) {
-  return `${time < 12 ? "오전" : "오후"} ${time > 12 ? time-12 : time}시`;
+function getKorTimeText(time: Date) {
+  const hour = time.getHours();
+  var text = `${hour < 12 ? "오전" : "오후"}`;
+  text += `${hour > 12 ? hour-12 : hour}시`;
+  
+  const min = time.getMinutes();
+  if (min !== 0) text += `${time.getMinutes()}분`;
+
+  return text;
 }
 
 const styles = StyleSheet.create({
