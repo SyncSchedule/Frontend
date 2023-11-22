@@ -13,4 +13,5 @@ export const colors = {
     borderGrey: '#A6A6A6',
     textGrey: '#CDCDCD',
     placeHolderGrey:'#F5F5F5',
+    devideLineGrey:'#E7E7E7'
 };

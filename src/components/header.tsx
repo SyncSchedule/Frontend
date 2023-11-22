@@ -15,11 +15,11 @@ import { dWidth, rw, rh, rf } from "~/styles/globalSizes";
 
 
 interface BasicHeaderProps {
-    left: string; //back, quit
+    left: "back" | "quit";
     leftPress: () => void;
     title: string;
-    right?: string; //setting
-    rightPress?: (href: Href) => void;
+    right?: "setting"
+    rightPress?: () => void;
 }
 
 //기본적인 헤더 - 뒤로가기, 화면 이름, 설정 버튼 존재
