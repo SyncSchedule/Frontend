@@ -15,10 +15,10 @@ import { dWidth, rw, rh, rf } from "~/styles/globalSizes";
 
 
 interface BasicHeaderProps {
-    left: "back" | "quit"; //back, quit
+    left: "back" | "quit";
     leftPress: () => void;
     title: string;
-    right?: string; //setting
+    right?: "setting"
     rightPress?: () => void;
 }
 
