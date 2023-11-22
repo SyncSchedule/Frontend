@@ -10,7 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { rw, rh, rf } from "~/styles/globalSizes";
 import { RootView } from "~/components/container";
 import { ProjectContainer } from "~/components/ContentContainer";
-import { projectListState } from "~/atoms/ProjectAtom";
+import { projectListState } from "~/atoms/projectAtom";
 
 type project = {
     name: string;
