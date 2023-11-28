@@ -16,4 +16,5 @@ export type Event = {
   date?: Date;
   start?: Date; //시작 시간
   end?: Date; // 종료 시간
+  contents?:string; //내용
 }
