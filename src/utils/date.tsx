@@ -37,11 +37,11 @@ export const getDayText = (d: number): string => {
 export function getKorTimeText(time: Moment) {
     //console.log('getKorTimeText time', time)
    const hour = time.hour();
-  var text = `${hour < 12 ? "오전" : "오후"}`;
+  var text = `${hour < 12 ? "오전 " : "오후 "}`;
   text += `${hour > 12 ? hour-12 : hour}시`;
   
   const min = time.minute();
-  if (min !== 0) text += `${min}분`;
+  if (min !== 0) text += ` ${min}분`;
 
   return text;
 
