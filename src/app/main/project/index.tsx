@@ -1,43 +1,27 @@
 //
 //메인화면 - 프로젝트 화면
 //
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { AntDesign } from '@expo/vector-icons';
 import { rw, rh, rf } from "~/styles/globalSizes";
 import { RootView } from "~/components/container";
 import { ProjectContainer } from "~/components/ContentContainer";
 import { projectListState } from "~/atoms/projectAtom";
 
-type project = {
-    name: string;
-    members: string[];
-    isOngoing: boolean;
-  }
-
 const ProjectScreen = () => {
     const [projectList, setProjectList] = useRecoilState(projectListState);
 
-    // const dummy: project[] = [
-    //     {
-    //         name: "UX 디자인",
-    //         members: ["김건국", "김건덕", "이쿠우", "박건우"],
-    //         isOngoing: true
-    //     },
-    //     {
-    //         name: "오픈소스SW프로젝트",
-    //         members: ["동동일","동동이","동동삼","동동사","동동오"],
-    //         isOngoing: true
-    //     },
-    //     {
-    //         name: "전공기초프로젝트1",
-    //         members: ["라이언, 제이지, 단무지"],
-    //         isOngoing: false
-    //     }
-    // ];
+    // useEffect(() => {
+    //     //종료한 프로젝트가 제일 아래에 오게
+    //     var cloneList = [...projectList];
+    //     const sortedProjectList = cloneList.sort((a,b) => a.isOngoing === b.isOngoing ? 0 : a.isOngoing ? -1 : 1) 
+    //     setProjectList(sortedProjectList);
+    // }, []);
+
 
     function addProject() {
         router.push('/add/project');

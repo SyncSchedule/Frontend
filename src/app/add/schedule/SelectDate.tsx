@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router';
 import CalendarPicker, { DateChangedCallback } from 'react-native-calendar-picker';
-import { Moment, locale } from 'moment';
+import moment, { Moment, locale } from 'moment';
 import { AntDesign } from '@expo/vector-icons';
 import { RootView } from '~/components/container'
 import { BasicHeader } from '~/components/header'
@@ -15,8 +15,10 @@ import { Button } from '~/components/Button'
 import { colors } from '~/styles/globalColors';
 
 const SelectDateScreen = () => {
-  const params = useLocalSearchParams();
-  const { project, event } = params;
+  const { project_name, event_name } = useLocalSearchParams<{
+    project_name: string;
+    event_name: string;
+  }>();
   
   const [isFixed, setIsFixed] = useState(false);
   const [startDate, setStartDate] = useState<Moment>();
@@ -35,7 +37,7 @@ const SelectDateScreen = () => {
     var dates = [];
     dates.push(startDate?.format("YYYY-MM-DD"));
     if (isFixed) {
-      return date;
+      return dates;
     }
 
     var date = startDate;
@@ -53,14 +55,20 @@ const SelectDateScreen = () => {
     if (isButtonEnabled){
       const dateRange = getSelectedDateRange();
       router.push({ 
-        pathname: '/main/status/SelectTime', 
+        pathname: '/add/schedule/SelectTime', 
         params: {
-          project: project,
-          event: event,
-          dateRange: dateRange    
+          project_name: project_name,
+          event_name: event_name,
+          dateRange: dateRange,
+          isFixed: isFixed
         }
       });
     }
+  }
+
+  const isPast = (date: Moment) => {
+    if (date.isAfter(moment())) return false;
+    else return true;
   }
 
   useEffect(() => {
@@ -85,6 +93,7 @@ const SelectDateScreen = () => {
           allowRangeSelection={!isFixed}
           onDateChange={onDateChange}
           width={rw(350)}
+          disabledDates={isPast}
         />
 
         <TouchableOpacity style={styles.checkContainer} onPress={() => setIsFixed(!isFixed)}>

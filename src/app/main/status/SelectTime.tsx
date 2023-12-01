@@ -3,47 +3,99 @@
 //
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react'
-import moment from 'moment';
-import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
+import moment, { Moment } from 'moment';
+import { View, StyleSheet, ScrollView, FlatList } from 'react-native'
 import { Button } from '~/components/Button';
 
 import { RootView } from '~/components/container';
 import { BasicHeader } from '~/components/header';
 import { rh, rw } from '~/styles/globalSizes';
-import { TimeTable } from '~/components/TimeTable';
+import { PressableTimeTable } from '~/components/PressableTimeTable';
 import { colors } from '~/styles/globalColors';
+import { Project, Status } from '~/types/globalTypes';
+import { projectListState } from '~/atoms/projectAtom';
+import { statusListState } from '~/atoms/statusAtom';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 
 const SelectTimeScreen = () => {
-  const params = useLocalSearchParams();
-  const { project, event, dateRange } = params;
+  const { project_name, event_name, state } = useLocalSearchParams<{
+    project_name: string;
+    event_name: string;
+    state: "not" | "done"
+  }>();
+
+  const [status, setStatus] = useState<Status>();
+  const [statusList, setStatusList] = useRecoilState(statusListState);
 
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [dateRangeList, setDateRangeList] = useState<string[]>([]);
+  const [dateRange, setDateRange] = useState<Moment[]>();
+  const [selectedTimeState, setSelectedTimeState] = useState<boolean[][]>();
 
   const onPressButton = () => {
+    //statusList 추가(변경)
+    if (isButtonEnabled && 
+        project_name && event_name && dateRange && status && selectedTimeState) {
 
+      const newStatus: Status = {
+        ...status,
+        status_by_member: [
+          ...status.status_by_member.filter(val => val.name !== "김건국"), 
+          {
+            name: "김건국",
+            selectedState: selectedTimeState
+          }
+        ]
+      };
+      const rest = statusList.filter(val => val.project_name !== project_name.toString() || val.event_name !== event_name.toString());
+      var newStatusList = [...rest, newStatus];
+      newStatusList = newStatusList.sort((a,b) => a.isFinished === b.isFinished ? 0 : a.isFinished ? 1 : -1);
+      setStatusList(newStatusList);
+
+      router.push('/main/status');
+    }
+  }
+
+  const onTimeChange = (tableState: boolean[][]) => {
+    setSelectedTimeState(tableState);
   }
 
   useEffect(() => {
-    if (dateRange) {
-      setDateRangeList(dateRange.toString().split(","));
-    }
+    setStatus(statusList.find((val) => val.project_name === project_name?.toString() && val.event_name === event_name?.toString()));
+
+    setDateRange(status?.date_range);
   }, []);
+
+  useEffect(() => {
+    if (status) {
+      setDateRange(status.date_range);
+    }
+  }, [status]);
+
+  useEffect(() => {
+    //하나라도 선택하면 버튼 활성화
+    if (selectedTimeState?.some(val => val.some(iv => iv))) {
+      setIsButtonEnabled(selectedTimeState?.some(val => val.some(iv => iv)));
+    } else setIsButtonEnabled(false);
+  }, [selectedTimeState]);
 
   return (
     <RootView>
       <BasicHeader 
-        title='시간 선택'
+        title={state === "not" ? '시간 선택' : '시간 수정'}
         left='back'
         leftPress={() => router.back()}
       />
 
-      <View style={styles.container}>
-        <View>
-          <TimeTable dateRange={dateRangeList}/>
-        </View>
-      </View>
+      <ScrollView style={styles.container}>
+      {(dateRange && status) && 
+        <PressableTimeTable 
+          dateRange={dateRange}
+          onTimeChange={onTimeChange}
+          onlyConsecutive={false}
+          initialValue={status.status_by_member.find(val => val.name === "김건국")?.selectedState}
+        />}
+      </ScrollView>
 
       <View style={styles.button}>
         <Button 
@@ -59,7 +111,8 @@ const SelectTimeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%"
+    paddingLeft: rw(20),
+    paddingBottom: rh(89),
   },
   button: {
     position: "absolute",

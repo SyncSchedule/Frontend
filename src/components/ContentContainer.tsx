@@ -1,3 +1,4 @@
+import { Moment } from 'moment';
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
 import { colors } from "~/styles/globalColors";
 import { rw, rh, rf } from "~/styles/globalSizes";
@@ -5,8 +6,8 @@ import { rw, rh, rf } from "~/styles/globalSizes";
 interface EventContainerHomeProps {
   project_name: string;
   event_name: string;
-  start: Date; //시작 시간 0-24
-  end: Date; // 종료 시간 0-24
+  start: Moment; //시작 시간 0-24
+  end: Moment; // 종료 시간 0-24
 }
 
 export function EventContainerHome({
@@ -63,9 +64,9 @@ export function EventStatusContainer({
 interface EventContainerProjectProps {
   event_name: string;
   isScheduled?: boolean;
-  date?: Date;
-  start?: Date; //시작 시간
-  end?: Date; // 종료 시간
+  date?: Moment;
+  start?: Moment; //시작 시간
+  end?: Moment; // 종료 시간
 }
 
 export function EventContainerProject({event_name, isScheduled, date, start, end}: EventContainerProjectProps) {
@@ -75,7 +76,7 @@ export function EventContainerProject({event_name, isScheduled, date, start, end
         <Text style={[styles.title]}>{event_name}</Text>
         <Text style={[styles.detail, {color: `${isScheduled ? "#7A7C81" : colors.blue}`}]}>
           {isScheduled 
-            ? `${date!.getMonth()+1}월 ${date!.getDate()}일 · ${getKorTimeText(start!)} - ${getKorTimeText(end!)}` 
+            ? `${date!.month()+1}월 ${date!.date()}일 · ${getKorTimeText(start!)} - ${getKorTimeText(end!)}` 
             : "조율 중"
           }
         </Text>
@@ -102,13 +103,13 @@ export function ProjectContainer({project_name, members, isOngoing}: ProjectCont
   )
 }
 
-function getKorTimeText(time: Date) {
-  const hour = time.getHours();
+function getKorTimeText(time: Moment) {
+  const hour = time.hour();
   var text = `${hour < 12 ? "오전" : "오후"}`;
   text += `${hour > 12 ? hour-12 : hour}시`;
   
-  const min = time.getMinutes();
-  if (min !== 0) text += `${time.getMinutes()}분`;
+  const min = time.minute();
+  if (min !== 0) text += `${min}분`;
 
   return text;
 }

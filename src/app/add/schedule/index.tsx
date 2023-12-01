@@ -13,20 +13,18 @@ import { rf, rh, rw } from '~/styles/globalSizes'
 import { colors } from '~/styles/globalColors'
 import { LabelTextInput } from '~/components/textInput'
 import { Button } from '~/components/Button'
+import { useRecoilValue } from 'recoil'
+import { projectListState } from '~/atoms/projectAtom'
 
 const AddScheduleScreen = () => {
   const [project, setProject] = useState<string>("");
   const [event, setEvent] = useState<string>("");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const projectList = useRecoilValue(projectListState);
 
   function setEventName(text: string) {
     setEvent(text);
   }
-
-  const dummyProjectList = [
-    {key: '1', value: "UX디자인"},
-    {key: '2', value: "오픈소스SW프로젝트"}
-  ]
 
   const onPressButton = () => {
     if (isButtonEnabled) {
@@ -34,8 +32,8 @@ const AddScheduleScreen = () => {
         router.push({
           pathname: '/add/schedule/SelectDate',
           params: {
-            project: project,
-            event: event
+            project_name: project,
+            event_name: event
           }
         });
       }
@@ -62,7 +60,7 @@ const AddScheduleScreen = () => {
           <View style={{ marginBottom: rh(54) }}>
             <SelectList 
               setSelected={(val: string) => setProject(val)}
-              data={dummyProjectList}
+              data={projectList.map(val => val.name)}
               save='value'
               search={false}
               placeholder='프로젝트명'

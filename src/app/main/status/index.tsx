@@ -1,13 +1,17 @@
 //
 //메인화면 - 현황 화면
 //
-import React from "react";
+import React, { useEffect } from "react";
 
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { rw, rh, rf } from "~/styles/globalSizes";
 import { RootView } from "~/components/container";
 import { EventStatusContainer } from "~/components/ContentContainer";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { statusListState } from "~/atoms/statusAtom";
+import { Status } from "~/types/globalTypes";
+import { projectListState } from "~/atoms/projectAtom";
 
 type eventStatus = {
     projectName: string;
@@ -16,37 +20,51 @@ type eventStatus = {
 }
 
 const StatusScreen = () => {
-    const dummy: eventStatus[] = [
-        {
-            projectName: "오픈소스SW프로젝트",
-            eventName: "주제 선정",
-            state: "not"
-        }, 
-        {
-            projectName: "졸업프로젝트",
-            eventName: "중간 발표 자료 준비",
-            state: "done"
-        },
-        {
-            projectName: "UX 디자인",
-            eventName: "화면 설계",
-            state: "ready"
-        },
-        {
-            projectName: "UX 디자인",
-            eventName: "주제 발표",
-            state: "finish"
-        },
-    ];
+    const [statusList, setStatusList] = useRecoilState(statusListState);
+    const projectList = useRecoilValue(projectListState);
 
-    function moveToStatusDetail(es: eventStatus) {
-        if (es.state !== "finish") {
-            if (es.state === "ready") {
-                router.push(`/main/status/FixStatus`);
-            } else {
-                router.push(`/main/status/${es.projectName}_${es.eventName}`);
-            }
+    function moveToStatusDetail(status: Status) {
+        const { project_name, event_name } = status;
+
+        const state = getState(status);
+
+        if (state !== "finish") {
+            if (state === "ready")
+                router.push({
+                    pathname: `/main/status/FixStatus`,
+                    params: {
+                        project_name: project_name,
+                        event_name: event_name,
+                    }
+                });
+            else //not, done
+                router.push({
+                    pathname: `/main/status/${project_name}_${event_name}`,
+                    params: {
+                        project_name: project_name,
+                        event_name: event_name,
+                        state: state
+                    }
+                });
         }
+    }
+
+    function getState(status: Status) {
+        const { project_name, status_by_member, isFinished } = status;
+        
+        if (isFinished) 
+            return "finish";//확정 완료
+
+        const project = projectList.filter((val) => val.name === project_name);
+        const members = project[0].members;
+
+        if (status_by_member.length === members.length) 
+            return "ready";//확정 가능
+
+        if (status_by_member.some((val) => val.name === "김건국")) 
+            return "done";//참여 완료
+        else    
+            return "not";//미참여
     }
 
     return (
@@ -58,13 +76,13 @@ const StatusScreen = () => {
                 </View>
                 <View>
                     <FlatList 
-                        data={dummy}
+                        data={statusList}
                         renderItem={({ item }) =>
                             <TouchableOpacity onPress={() => moveToStatusDetail(item)}>
                                 <EventStatusContainer
-                                    project_name={item.projectName}
-                                    event_name={item.eventName}
-                                    state={item.state}
+                                    project_name={item.project_name}
+                                    event_name={item.event_name}
+                                    state={getState(item)}
                                 />
                                 <View style={styles.space}></View>
                             </TouchableOpacity> 
