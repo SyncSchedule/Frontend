@@ -26,6 +26,7 @@ export const projectListState = atom<Project[]>({
           date: moment("2023-11-15"),
           start: moment("2023-11-15 13"),
           end: moment("2023-11-15 15"),
+          contents: "1. 약속 조율 + 프로젝트 중점적으로, 캘린더 확정된 해당 날짜 누르면 내용 작성할 수 있게끔\n\ta. 일정 조율 - 언제만나 앱 참고 → 확정시 장소 기입\n\tb. 확정시키면 확정된 일정 볼 수 있는 캘린더\n\tc. 해당 날짜 클릭하면 회의 내용 작성, 조회할 수 있도록\n\td. 해당 날짜 다가오면 알림"
         }
       ]
     },

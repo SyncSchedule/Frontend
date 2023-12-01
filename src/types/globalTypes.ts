@@ -18,6 +18,7 @@ export type Event = {
   date?: Moment;
   start?: Moment; //시작 시간
   end?: Moment; // 종료 시간
+  contents?:string; //내용
 }
 
 export type Status = {

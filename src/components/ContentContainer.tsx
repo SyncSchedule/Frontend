@@ -1,5 +1,8 @@
 import { Moment } from 'moment';
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
+
+import { getKorTimeText } from '~/utils/date';
+
 import { colors } from "~/styles/globalColors";
 import { rw, rh, rf } from "~/styles/globalSizes";
 
@@ -101,17 +104,6 @@ export function ProjectContainer({project_name, members, isOngoing}: ProjectCont
       </View>
     </View>
   )
-}
-
-function getKorTimeText(time: Moment) {
-  const hour = time.hour();
-  var text = `${hour < 12 ? "오전" : "오후"}`;
-  text += `${hour > 12 ? hour-12 : hour}시`;
-  
-  const min = time.minute();
-  if (min !== 0) text += `${min}분`;
-
-  return text;
 }
 
 const styles = StyleSheet.create({
