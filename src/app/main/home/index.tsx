@@ -3,7 +3,7 @@
 //
 import React, { useRef, useMemo, useState, useEffect } from "react";
 
-import { Button, StyleSheet, View, Pressable, Text, FlatList } from "react-native";
+import { StyleSheet, View, Pressable, Text, FlatList } from "react-native";
 import { router, Stack} from "expo-router";
 import { Feather, Ionicons } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -15,13 +15,19 @@ import { useRecoilState } from 'recoil';
 import { projectListState } from "~/atoms/projectAtom";
 
 import { RootView } from "~/components/container";
-import { getDayText } from "~/components/date";
+import { getDayText } from "~/utils/date";
 import { EventContainerHome } from "~/components/ContentContainer";
+
+import { Event } from "~/types/globalTypes";
 
 import { dWidth, rf, rh, rw } from "~/styles/globalSizes";
 import { fonts } from "~/styles/globalFonts";
 import { colors } from "~/styles/globalColors";
 
+type EventDateType ={
+    event: Event;
+    projectName: string;
+}
 
 const HomeScreen = () => {
     const refRBSheet = useRef<RBSheet>(null);
@@ -29,28 +35,28 @@ const HomeScreen = () => {
     const [pickerDate, setPickerDate] = useState<string | undefined>();
     const [selectMonth, setSelectMonth] = useState<Date>(new Date());
     const [selectDate, setSelectDate] = useState<string>(moment(new Date).format('YYYY-MM-DD'))
-    console.log('selectDate', selectDate)
-    const [eventDate, setEventDate] = useState<any>([])
+    //console.log('selectDate', selectDate)
+    const [eventDate, setEventDate] = useState<EventDateType[]>([])
     console.log('eventDate', eventDate)
 
     const [projectList, setProjectList] = useRecoilState(projectListState);
-    //console.log('HomeScreen projectList', projectList)
+    console.log('HomeScreen projectList', projectList)
 
-    const [markedDay, setMarkedDay] = useState<Object | any>({})
+    const [markedDay, setMarkedDay] = useState<Object>({})
     //console.log('markedDay', markedDay)
 
     useEffect(() => {
         if (!projectList.length)
             return;
 
-        var md = { ...markedDay }
-        var ed = [...eventDate]
+        var md:object = {}
+        var ed:EventDateType[] = []
 
         projectList.forEach(project => {
             var projectName = project.name
             project.events.forEach(event => {
-                if (event.isScheduled) {
-                    var d = moment(event.date).format("YYYY-MM-DD")
+                if (event.isScheduled && event.date) {
+                    var d = event.date.format("YYYY-MM-DD")
                     md[`${d}`] = {
                         marked: true,
                         markedColor: "orange",
@@ -73,7 +79,7 @@ const HomeScreen = () => {
         const currentYear: number = new Date().getFullYear();
         const yearMonthArr: string[] = [];
 
-        for (let year: number = 2010; year <= currentYear; year++) {
+        for (let year: number = 2010; year <= currentYear+1; year++) {
             for (let month: number = 1; month <= 12; month++) {
                 yearMonthArr.push(`${year}년 ${month}월`);
             }
@@ -97,9 +103,16 @@ const HomeScreen = () => {
     }
 
     const renderItem = ({ item }: any) => {
+        console.log('item', item)
         if (moment(item.event.date).format("YYYY-MM-DD") == selectDate) {
             return (
-                <Pressable onPress={() => router.push({ pathname: `/scheduleDetail/${item.event.name.trim()}`, params: item  })}>
+                <Pressable onPress={() => router.push({ 
+                    pathname: `/scheduleDetail/${item.event.name.trim()}`,
+                    params: {
+                        eventName: item.event.name,
+                        projectName: item.projectName
+                        }
+                    })} style={{marginVertical:rh(3)}}>
                     <EventContainerHome
                         project_name={item.projectName}
                         event_name={item.event.name}

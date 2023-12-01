@@ -1,3 +1,5 @@
+import { Moment } from "moment";
+
 export type Project = {
   name: string;
   introduction: string;
@@ -13,8 +15,8 @@ export type Project = {
 export type Event = {
   name: string;
   isScheduled?: boolean;
-  date?: Date;
-  start?: Date; //시작 시간
-  end?: Date; // 종료 시간
+  date?: Moment;
+  start?: Moment; //시작 시간
+  end?: Moment; // 종료 시간
   contents?:string; //내용
 }

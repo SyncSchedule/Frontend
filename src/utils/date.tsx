@@ -1,5 +1,7 @@
 //날짜 관련 컴포넌트
 
+import { Moment } from "moment";
+
 export const getDayText = (d: number): string => {
     let day = ''
 
@@ -30,4 +32,17 @@ export const getDayText = (d: number): string => {
     }
 
     return day
+}
+
+export function getKorTimeText(time: Moment) {
+    //console.log('getKorTimeText time', time)
+   const hour = time.hour();
+  var text = `${hour < 12 ? "오전" : "오후"}`;
+  text += `${hour > 12 ? hour-12 : hour}시`;
+  
+  const min = time.minute();
+  if (min !== 0) text += `${min}분`;
+
+  return text;
+
 }
