@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { View, Text, StyleSheet } from 'react-native'
-import { router, useNavigation } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { RootView } from '~/components/container'
 import { BasicHeader } from '~/components/header'
@@ -17,6 +17,7 @@ import { useRecoilValue } from 'recoil'
 import { projectListState } from '~/atoms/projectAtom'
 
 const AddScheduleScreen = () => {
+  const { project_name } = useLocalSearchParams();
   const [project, setProject] = useState<string>("");
   const [event, setEvent] = useState<string>("");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -47,6 +48,12 @@ const AddScheduleScreen = () => {
     }
   }, [project, event]);
 
+  useEffect(() => {
+    if (project_name) {
+
+    }
+  }, []);
+
   return (
     <RootView>
       <BasicHeader 
@@ -59,12 +66,16 @@ const AddScheduleScreen = () => {
           <Text style={[styles.labelText]}>프로젝트 선택</Text>
           <View style={{ marginBottom: rh(54) }}>
             <SelectList 
-              setSelected={(val: string) => setProject(val)}
-              data={projectList.map(val => val.name)}
+              setSelected={(val: string) => {console.log(val);setProject(val);}}
+              data={projectList.map((val) => ({ key: `${val}`, value: val.name }))}
               save='value'
               search={false}
               placeholder='프로젝트명'
               boxStyles={styles.selectBox}
+              defaultOption={
+                project_name 
+                ?  ({ key: project_name, value: project_name })
+                : undefined}
             />
           </View>
         </View>

@@ -55,8 +55,9 @@ const StatusScreen = () => {
         if (isFinished) 
             return "finish";//확정 완료
 
-        const project = projectList.filter((val) => val.name === project_name);
-        const members = project[0].members;
+        const project = projectList.find((val) => val.name === project_name);
+        
+        const members = project!.members;
 
         if (status_by_member.length === members.length) 
             return "ready";//확정 가능
@@ -65,6 +66,7 @@ const StatusScreen = () => {
             return "done";//참여 완료
         else    
             return "not";//미참여
+        
     }
 
     return (

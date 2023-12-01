@@ -26,14 +26,7 @@ export const projectListState = atom<Project[]>({
           date: moment("2023-11-15"),
           start: moment("2023-11-15 13"),
           end: moment("2023-11-15 15"),
-        }, 
-        // {
-        //   name: "최종 발표 준비",
-        //   isScheduled: true,
-        //   date: moment("2023-12-15"),
-        //   start: moment("2023-12-15 13"),
-        //   end: moment("2023-12-15 15"),
-        // }
+        }
       ]
     },
     {

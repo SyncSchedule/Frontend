@@ -161,7 +161,15 @@ const ProjectDetailScreen = () => {
           </View>}
         </View>
 
-        {project.isOngoing && <TouchableOpacity style={styles.floatingButton} onPress={() => router.push(`/add/schedule`)}>
+        {project.isOngoing && 
+        <TouchableOpacity 
+          style={styles.floatingButton} 
+          onPress={() => router.push({
+            pathname: `/add/schedule`,
+            params: {
+              project_name: project.name
+            }
+          })}>
           <AntDesign name="pluscircle" size={rw(55)} color="black" />
         </TouchableOpacity>}
       </View>
