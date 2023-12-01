@@ -3,9 +3,9 @@
 //
 import React, { useRef, useMemo, useState, useEffect } from "react";
 
-import { StyleSheet, View, Pressable, Text, FlatList } from "react-native";
-import { router, Stack} from "expo-router";
-import { Feather, Ionicons } from '@expo/vector-icons';
+import { StyleSheet, View, Pressable, Text, FlatList, TouchableOpacity } from "react-native";
+import { router, Stack } from "expo-router";
+import { Feather, Ionicons, AntDesign } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
 import WheelPickerExpo from 'react-native-wheel-picker-expo';
 import moment from 'moment';
@@ -24,7 +24,7 @@ import { dWidth, rf, rh, rw } from "~/styles/globalSizes";
 import { fonts } from "~/styles/globalFonts";
 import { colors } from "~/styles/globalColors";
 
-type EventDateType ={
+type EventDateType = {
     event: Event;
     projectName: string;
 }
@@ -49,8 +49,8 @@ const HomeScreen = () => {
         if (!projectList.length)
             return;
 
-        var md:object = {}
-        var ed:EventDateType[] = []
+        var md: object = {}
+        var ed: EventDateType[] = []
 
         projectList.forEach(project => {
             var projectName = project.name
@@ -79,7 +79,7 @@ const HomeScreen = () => {
         const currentYear: number = new Date().getFullYear();
         const yearMonthArr: string[] = [];
 
-        for (let year: number = 2010; year <= currentYear+1; year++) {
+        for (let year: number = 2010; year <= currentYear + 1; year++) {
             for (let month: number = 1; month <= 12; month++) {
                 yearMonthArr.push(`${year}년 ${month}월`);
             }
@@ -106,13 +106,13 @@ const HomeScreen = () => {
         console.log('item', item)
         if (moment(item.event.date).format("YYYY-MM-DD") == selectDate) {
             return (
-                <Pressable onPress={() => router.push({ 
-                    pathname: `/scheduleDetail/${item.event.name.trim()}`,
+                <Pressable onPress={() => router.push({
+                    pathname: `/scheduleDetail/${item.event.name}`,
                     params: {
                         eventName: item.event.name,
                         projectName: item.projectName
-                        }
-                    })} style={{marginVertical:rh(3)}}>
+                    }
+                })} style={{ marginVertical: rh(3) }}>
                     <EventContainerHome
                         project_name={item.projectName}
                         event_name={item.event.name}
@@ -130,7 +130,7 @@ const HomeScreen = () => {
 
     return (
         <RootView>
-            <Stack.Screen options={{ headerShown:false }}/>
+            <Stack.Screen options={{ headerShown: false }} />
 
             <View style={styles.dateView}>
                 <Feather name="menu" size={rh(30)} color="black" />
@@ -191,6 +191,15 @@ const HomeScreen = () => {
                     onChange={({ item }) => setPickerDate(item.value)}
                 />
             </RBSheet>
+
+            <TouchableOpacity
+                style={styles.floatingButton}
+                onPress={() => router.push(
+                    `/add/schedule`,
+
+                )}>
+                <AntDesign name="pluscircle" size={rw(55)} color="black" />
+            </TouchableOpacity>
         </RootView>
     );
 }
@@ -231,5 +240,12 @@ const styles = StyleSheet.create({
 
     eventView: {
         paddingHorizontal: rw(20)
+    },
+
+    floatingButton: {
+        position: 'absolute',
+        right: rw(10),
+        bottom: rh(10),
+        alignSelf: 'flex-end'
     }
 })

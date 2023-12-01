@@ -25,7 +25,7 @@ import { fonts } from "~/styles/globalFonts";
 
 const ScheduleDetailScreen = () => {
     const params = useLocalSearchParams();
-    let { projectName, eventName } = params;
+    const { projectName, eventName } = params;
 
     const [projectList, setProjectList] = useRecoilState(projectListState);
     //console.log('projectList', projectList)
@@ -50,20 +50,31 @@ const ScheduleDetailScreen = () => {
     const onPressDelete = () => {
         Alert.alert('삭제', '정말 일정을 삭제하시겠습니까?', [
             { text: '취소', onPress: () => { }, },
-            { text: '확인', onPress: ()=>{
-                const newProjectList = projectList.filter(p => p.name !== projectName)
+            {
+                text: '확인', onPress: () => {
+                    const project = projectList.find(p => p.name == projectName)
 
-                setProjectList([...newProjectList])
+                    if (project) {
+                        const newEvents = project.events.filter(e => e.name !== eventName)
+                        const updateProjectList = projectList.map(p => p.name == projectName ? { ...project, events: newEvents } : p)
 
-                Alert.alert('일정이 삭제되었습니다.')
-    
-                router.back()
-            } },
+                        setProjectList([...updateProjectList])
+
+                        Alert.alert('일정 내용이 작성되었습니다.')
+
+                        router.back()
+                    }
+
+                    Alert.alert('일정이 삭제되었습니다.')
+
+                    router.back()
+                }
+            },
         ])
     }
 
     const onPressComplete = () => {
-        if(!event) return
+        if (!event) return
 
         if (!input) {
             Alert.alert('내용을 작성해주세요.')
@@ -71,8 +82,8 @@ const ScheduleDetailScreen = () => {
         }
 
         const project = projectList.find(p => p.name == projectName)
- 
-        if(project){
+
+        if (project) {
             const newEvent = {
                 ...event,
                 contents: input
@@ -83,12 +94,12 @@ const ScheduleDetailScreen = () => {
                 ...project,
                 events: [...updateEvents]
             }
-    
+
             const updateProjectList = projectList.map(p => p.name == projectName ? updateProject : p)
             setProjectList([...updateProjectList])
-    
+
             Alert.alert('일정 내용이 작성되었습니다.')
-    
+
             router.back()
         }
     }
