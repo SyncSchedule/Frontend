@@ -3,7 +3,7 @@ import { atom, atomFamily } from 'recoil';
 import { Project } from '~/types/globalTypes';
 
 export const projectListState = atom<Project[]>({
-  key:'projectListState',
+  key: 'projectListState',
   default: [
     {
       name: "UX 디자인",

@@ -1,23 +1,26 @@
 //
 //메인화면 - 홈화면
 //
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 
-import { Button, StyleSheet, View, Pressable, Text } from "react-native";
-import { router } from "expo-router";
+import { Button, StyleSheet, View, Pressable, Text, FlatList } from "react-native";
+import { router, Stack} from "expo-router";
 import { Feather, Ionicons } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
 import WheelPickerExpo from 'react-native-wheel-picker-expo';
 import moment from 'moment';
 import { Calendar } from 'react-native-calendars';
+import { useRecoilState } from 'recoil';
+
+import { projectListState } from "~/atoms/projectAtom";
 
 import { RootView } from "~/components/container";
+import { getDayText } from "~/components/date";
+import { EventContainerHome } from "~/components/ContentContainer";
 
 import { dWidth, rf, rh, rw } from "~/styles/globalSizes";
 import { fonts } from "~/styles/globalFonts";
 import { colors } from "~/styles/globalColors";
-
-const testSchedule = 'testSchedule'
 
 
 const HomeScreen = () => {
@@ -25,7 +28,42 @@ const HomeScreen = () => {
 
     const [pickerDate, setPickerDate] = useState<string | undefined>();
     const [selectMonth, setSelectMonth] = useState<Date>(new Date());
-    const [selectDate, setSelectDate] = useState<string | undefined>()
+    const [selectDate, setSelectDate] = useState<string>(moment(new Date).format('YYYY-MM-DD'))
+    console.log('selectDate', selectDate)
+    const [eventDate, setEventDate] = useState<any>([])
+    console.log('eventDate', eventDate)
+
+    const [projectList, setProjectList] = useRecoilState(projectListState);
+    //console.log('HomeScreen projectList', projectList)
+
+    const [markedDay, setMarkedDay] = useState<Object | any>({})
+    //console.log('markedDay', markedDay)
+
+    useEffect(() => {
+        if (!projectList.length)
+            return;
+
+        var md = { ...markedDay }
+        var ed = [...eventDate]
+
+        projectList.forEach(project => {
+            var projectName = project.name
+            project.events.forEach(event => {
+                if (event.isScheduled) {
+                    var d = moment(event.date).format("YYYY-MM-DD")
+                    md[`${d}`] = {
+                        marked: true,
+                        markedColor: "orange",
+                    }
+
+                    ed.push({ event, projectName });
+                }
+            })
+        })
+
+        setEventDate([...ed])
+        setMarkedDay({ ...md })
+    }, [projectList])
 
 
     //날짜 포맷
@@ -58,10 +96,29 @@ const HomeScreen = () => {
         }
     }
 
+    const renderItem = ({ item }: any) => {
+        if (moment(item.event.date).format("YYYY-MM-DD") == selectDate) {
+            return (
+                <Pressable onPress={() => router.push({ pathname: `/scheduleDetail/${item.event.name.trim()}`, params: item  })}>
+                    <EventContainerHome
+                        project_name={item.projectName}
+                        event_name={item.event.name}
+                        start={item.event.start}
+                        end={item.event.end}
+                    />
+                </Pressable>
+            )
+        } else {
+            return <View />
+        }
+    }
+
 
 
     return (
         <RootView>
+            <Stack.Screen options={{ headerShown:false }}/>
+
             <View style={styles.dateView}>
                 <Feather name="menu" size={rh(30)} color="black" />
                 <Pressable onPress={() => refRBSheet.current?.open()} style={{ flexDirection: 'row', alignItems: 'center', marginLeft: rw(8) }}>
@@ -77,15 +134,24 @@ const HomeScreen = () => {
                     setSelectDate(day.dateString);
                 }}
                 markedDates={{
-                    [selectDate]: { selected: true, selectedColor: colors.black }
-
+                    [selectDate]: { selected: true, selectedColor: colors.black },
+                    ...markedDay
                 }}
             />
             <View style={{ height: rh(1), width: rw(370), marginVertical: rh(20), backgroundColor: colors.devideLineGrey, alignSelf: 'center' }} />
 
-            <Button title="일정 정보" onPress={() => router.push(`/main/home/${testSchedule}`)} />
+            <View style={styles.eventView}>
+                <Text style={styles.dateText}>{new Date(selectDate).getDate()}.  {getDayText(new Date(selectDate).getDay())}</Text>
+
+                <FlatList
+                    data={eventDate}
+                    renderItem={renderItem}
+                />
+            </View>
+
+            {/* <Button title="일정 정보" onPress={() => router.push(`/main/home/${testSchedule}`)} />
             <Button title="일정 추가" onPress={() => router.push('/add/schedule')} />
-            <Button title="드로어" onPress={() => router.push('/drawer')} />
+            <Button title="드로어" onPress={() => router.push('/drawer')} /> */}
 
             {/* 날짜 선택 bottomSheet */}
             <RBSheet
@@ -149,4 +215,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: rw(20),
         alignItems: 'flex-end'
     },
+
+    eventView: {
+        paddingHorizontal: rw(20)
+    }
 })
