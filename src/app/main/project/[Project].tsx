@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
-import { router, useGlobalSearchParams } from 'expo-router'
+import { router, useGlobalSearchParams, Stack } from 'expo-router'
 import uuid from 'react-native-uuid';
 import * as Clipboard from 'expo-clipboard';
 import { AntDesign } from '@expo/vector-icons';
@@ -23,13 +23,13 @@ import { Chip } from '~/components/Chip';
 
 const ProjectDetailScreen = () => {
   const params = useGlobalSearchParams();
-  
+
   const [project, setProject] = useState<Project>();
   const [pastEvents, setPastEvents] = useState<Event[]>();
   const [futureEvents, setFutureEvents] = useState<Event[]>();
   const [invitationCode, setInvitationCode] = useState<string>();
   const [isMemberOpen, setIsMemberOpen] = useState(false);
-  
+
   const projectList = useRecoilValue(projectListState);
 
   useEffect(() => {
@@ -59,15 +59,15 @@ const ProjectDetailScreen = () => {
 
   async function copyInvitationCode() { //초대코드 복사
     var code = invitationCode;
-    
-    if (!code){
+
+    if (!code) {
       code = uuid.v4().toString();
       setInvitationCode(code);
     }
 
     try {
-        await Clipboard.setStringAsync(code);
-        alert("초대코드가 복사되었습니다. 팀원에게 알려주세요!"); 
+      await Clipboard.setStringAsync(code);
+      alert("초대코드가 복사되었습니다. 팀원에게 알려주세요!");
     } catch (e) {
       alert(e);
     }
@@ -75,16 +75,16 @@ const ProjectDetailScreen = () => {
 
   return project && (
     <RootView>
-      <BasicHeader 
-        title={project?.name}
-        left='back'
-        leftPress={() => router.back()}
-        right="setting"
-        rightPress={() => router.push({
-          pathname: `/main/project/Setting`,
-          params: {}
-        })}
-      />
+      <Stack.Screen options={{
+        header: () => <BasicHeader
+          title={project?.name}
+          left='back'
+          leftPress={() => router.back()}
+          right="setting"
+          rightPress={() => router.push(`/setting/${project.name}`)}
+        />
+      }} />
+
       <View style={styles.container}>
         <View style={styles.introContainer}>
           <AntDesign name="sound" size={rh(15)} color="#535456" />
@@ -96,82 +96,82 @@ const ProjectDetailScreen = () => {
             <Text style={styles.headerText}>멤버</Text>
             <Text style={styles.headerText}>{`${project.members.length}명`}</Text>
             <TouchableOpacity onPress={() => setIsMemberOpen(!isMemberOpen)}>
-            {isMemberOpen ? (
-              <MaterialCommunityIcons name="arrow-up-drop-circle" size={24} color="black" />
-            ) : (
-              <MaterialCommunityIcons name="arrow-down-drop-circle-outline" size={24} color="black" />
-            )}
+              {isMemberOpen ? (
+                <MaterialCommunityIcons name="arrow-up-drop-circle" size={24} color="black" />
+              ) : (
+                <MaterialCommunityIcons name="arrow-down-drop-circle-outline" size={24} color="black" />
+              )}
             </TouchableOpacity>
           </View>
-          {isMemberOpen && 
-          <View style={styles.memberContainer}>
-          {project.members.map((val, idx) => (
-            <View style={styles.chipContainer} key={`member_chip_${idx}`}>
-              <Chip 
-                text={val.name} 
-                color={val.isLeader ? colors.blue : colors.gray} 
-              />
-            </View>
-          ))}
-            <TouchableOpacity onPress={copyInvitationCode}>
-              <Chip text='초대하기+' color={colors.dark} textColor={colors.white} textSize={rf(12)}/>
-            </TouchableOpacity>
-          </View>}
+          {isMemberOpen &&
+            <View style={styles.memberContainer}>
+              {project.members.map((val, idx) => (
+                <View style={styles.chipContainer} key={`member_chip_${idx}`}>
+                  <Chip
+                    text={val.name}
+                    color={val.isLeader ? colors.blue : colors.gray}
+                  />
+                </View>
+              ))}
+              <TouchableOpacity onPress={copyInvitationCode}>
+                <Chip text='초대하기+' color={colors.dark} textColor={colors.white} textSize={rf(12)} />
+              </TouchableOpacity>
+            </View>}
         </View>
 
         <View style={{ marginTop: rh(30) }}>
-          {futureEvents && 
-          <View>
-            <Text style={styles.headerText}>예정 일정</Text>
-            <FlatList 
-              data={futureEvents}
-              renderItem={({ item }) => (
-                <View>
-                  <EventContainerProject 
-                    event_name={item.name}
-                    isScheduled={item.isScheduled}
-                    date={item.date}
-                    start={item.start}
-                    end={item.end}
-                  />            
-                  <View style={styles.space}></View>     
-                </View>
-              )}
-            />
-          </View>}
-          {pastEvents && 
-          <View>
-            <Text style={styles.headerText}>지난 일정</Text>
-            <FlatList 
-              data={pastEvents}
-              renderItem={({ item }) => (
-                <View>
-                  <EventContainerProject 
-                    event_name={item.name}
-                    isScheduled={true}
-                    date={item.date}
-                    start={item.start}
-                    end={item.end}
-                  />
-                  <View style={styles.space}></View>
-                </View>
-                
-              )}
-            />
-          </View>}
+          {futureEvents &&
+            <View>
+              <Text style={styles.headerText}>예정 일정</Text>
+              <FlatList
+                data={futureEvents}
+                renderItem={({ item }) => (
+                  <View>
+                    <EventContainerProject
+                      event_name={item.name}
+                      isScheduled={item.isScheduled}
+                      date={item.date}
+                      start={item.start}
+                      end={item.end}
+                    />
+                    <View style={styles.space}></View>
+                  </View>
+                )}
+              />
+            </View>}
+          {pastEvents &&
+            <View>
+              <Text style={styles.headerText}>지난 일정</Text>
+              <FlatList
+                data={pastEvents}
+                renderItem={({ item }) => (
+                  <View>
+                    <EventContainerProject
+                      event_name={item.name}
+                      isScheduled={true}
+                      date={item.date}
+                      start={item.start}
+                      end={item.end}
+                    />
+                    <View style={styles.space}></View>
+                  </View>
+
+                )}
+              />
+            </View>}
         </View>
 
-        {project.isOngoing && 
-        <TouchableOpacity 
-          style={styles.floatingButton} 
-          onPress={() => router.push({
-            pathname: `/add/schedule`,
-            params: {
-              project_name: project.name
-            }
-          })}>
-          <AntDesign name="pluscircle" size={rw(55)} color="black" />
-        </TouchableOpacity>}
+        {project.isOngoing &&
+          <TouchableOpacity
+            style={styles.floatingButton}
+            onPress={() => router.push({
+              pathname: `/add/schedule`,
+              params: {
+                project_name: project.name
+              }
+            })}>
+            <AntDesign name="pluscircle" size={rw(55)} color="black" />
+          </TouchableOpacity>}
       </View>
 
     </RootView>
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   chipContainer: {
-    marginBottom: rh(20), 
+    marginBottom: rh(20),
     marginRight: rw(9)
   },
   // memberChip: {
@@ -227,13 +227,13 @@ const styles = StyleSheet.create({
   // },
   space: {
     height: rh(17)
-  },  
+  },
   floatingButton: {
-    position:'absolute',
-    right: rw(10), 
+    position: 'absolute',
+    right: rw(10),
     bottom: rh(10),
-    alignSelf:'flex-end'
-  }  
+    alignSelf: 'flex-end'
+  }
 })
 
 export default ProjectDetailScreen

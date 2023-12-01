@@ -107,7 +107,7 @@ const HomeScreen = () => {
         if (moment(item.event.date).format("YYYY-MM-DD") == selectDate) {
             return (
                 <Pressable onPress={() => router.push({ 
-                    pathname: `/scheduleDetail/${item.event.name.trim()}`,
+                    pathname: `/scheduleDetail/${item.event.name}`,
                     params: {
                         eventName: item.event.name,
                         projectName: item.projectName
