@@ -12,6 +12,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { statusListState } from "~/atoms/statusAtom";
 import { Status } from "~/types/globalTypes";
 import { projectListState } from "~/atoms/projectAtom";
+import { UserState } from "~/atoms/UserAtom";
 
 type eventStatus = {
     projectName: string;
@@ -22,6 +23,7 @@ type eventStatus = {
 const StatusScreen = () => {
     const [statusList, setStatusList] = useRecoilState(statusListState);
     const projectList = useRecoilValue(projectListState);
+    const User = useRecoilValue(UserState)
 
     function moveToStatusDetail(status: Status) {
         const { project_name, event_name } = status;
@@ -51,22 +53,43 @@ const StatusScreen = () => {
 
     function getState(status: Status) {
         const { project_name, status_by_member, isFinished } = status;
-        
-        if (isFinished) 
+
+        if (isFinished)
             return "finish";//확정 완료
 
         const project = projectList.find((val) => val.name === project_name);
-        
+
         const members = project!.members;
 
-        if (status_by_member.length === members.length) 
+        if (status_by_member.length === members.length)
             return "ready";//확정 가능
 
-        if (status_by_member.some((val) => val.name === "김건국")) 
+        if (status_by_member.some((val) => val.name === "김건국"))
             return "done";//참여 완료
-        else    
+        else
             return "not";//미참여
-        
+
+    }
+
+    const renderItem = ({ item }: { item: Status }) => {
+        const project = projectList.find(p => p.name === item.project_name);
+
+        const isMember = project!.members.find(m => m.id === User.id)
+
+        if (isMember) {
+            return (
+                <TouchableOpacity onPress={() => moveToStatusDetail(item)}>
+                    <EventStatusContainer
+                        project_name={item.project_name}
+                        event_name={item.event_name}
+                        state={getState(item)}
+                    />
+                    <View style={styles.space}></View>
+                </TouchableOpacity>
+            )
+        } else {
+            return;
+        }
     }
 
     return (
@@ -76,19 +99,10 @@ const StatusScreen = () => {
                     <Text style={[styles.headerTitle]}>현황</Text>
                     <Text style={[styles.headerFilter]}>생성일 순 ∨</Text>
                 </View>
-                <View>
-                    <FlatList 
+                <View style={{ flex: 1 }}>
+                    <FlatList
                         data={statusList}
-                        renderItem={({ item }) =>
-                            <TouchableOpacity onPress={() => moveToStatusDetail(item)}>
-                                <EventStatusContainer
-                                    project_name={item.project_name}
-                                    event_name={item.event_name}
-                                    state={getState(item)}
-                                />
-                                <View style={styles.space}></View>
-                            </TouchableOpacity> 
-                        }
+                        renderItem={renderItem}
                     />
                 </View>
             </View>
@@ -97,7 +111,7 @@ const StatusScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         paddingHorizontal: rw(18),
         paddingTop: rh(19),
         flex: 1
@@ -111,7 +125,7 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: rf(20),
         fontWeight: 'bold'
-    }, 
+    },
     headerFilter: {
         fontSize: rf(15),
         position: 'absolute',
@@ -120,6 +134,6 @@ const styles = StyleSheet.create({
     space: {
         height: rh(17)
     }
-  });
+});
 
 export default StatusScreen;
