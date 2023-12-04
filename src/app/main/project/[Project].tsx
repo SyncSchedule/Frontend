@@ -53,6 +53,7 @@ const ProjectDetailScreen = () => {
       })
       setFutureEvents(futureEventsList);
       setPastEvents(pastEventList)
+      setInvitationCode(project?.code)
     }
   }, [project]);
 
