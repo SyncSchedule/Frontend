@@ -35,6 +35,12 @@ const EnterProjectScreen = () => {
     const project = projectList.find(p => p.code === code)
 
     if (project) {
+      const isMember = project.members.find(m => m.name === User.name)
+      if(isMember){
+        Alert.alert('이미 팀원으로 등록되어있습니다.')
+        return;
+      }
+      
       const newProject = {
          ...project,
         members: [

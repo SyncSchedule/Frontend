@@ -53,22 +53,17 @@ const ProjectDetailScreen = () => {
       })
       setFutureEvents(futureEventsList);
       setPastEvents(pastEventList)
-      setInvitationCode(project?.code)
+      setInvitationCode(project.code)
     }
   }, [project]);
 
 
   async function copyInvitationCode() { //초대코드 복사
-    var code = invitationCode;
-
-    if (!code) {
-      code = uuid.v4().toString();
-      setInvitationCode(code);
-    }
-
     try {
-      await Clipboard.setStringAsync(code);
-      alert("초대코드가 복사되었습니다. 팀원에게 알려주세요!");
+      if (invitationCode) {
+        await Clipboard.setStringAsync(invitationCode);
+        alert("초대코드가 복사되었습니다. 팀원에게 알려주세요!");
+      }
     } catch (e) {
       alert(e);
     }
