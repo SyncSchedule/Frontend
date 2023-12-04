@@ -15,6 +15,7 @@ export const projectListState = atom<Project[]>({
         { name: "박건우", isLeader: false },
       ],
       isOngoing: true,
+      isShowCalendar:true,
       code:'1111',
       events: [
         {
@@ -41,6 +42,7 @@ export const projectListState = atom<Project[]>({
         { name: "동동사", isLeader: false },
       ],
       isOngoing: true,
+      isShowCalendar:true,
       code:'2222',
       events: [
         {
@@ -58,6 +60,7 @@ export const projectListState = atom<Project[]>({
         { name: "단무지", isLeader: false },
       ],
       isOngoing: false,
+      isShowCalendar:false,
       code:'3333',
       events: [
         {

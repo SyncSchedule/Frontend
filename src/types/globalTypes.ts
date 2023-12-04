@@ -8,7 +8,8 @@ export type Project = {
     isLeader: boolean;
   }[];
   isOngoing: boolean;
-  code?: string;
+  isShowCalendar:boolean;
+  code: string;
   events: Event[]
 }
 
