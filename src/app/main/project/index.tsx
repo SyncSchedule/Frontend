@@ -5,15 +5,23 @@ import React, { useEffect, useState } from "react";
 
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from "react-native";
 import { router, Stack } from "expo-router";
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { AntDesign } from '@expo/vector-icons';
-import { rw, rh, rf } from "~/styles/globalSizes";
+import { useRecoilState, useRecoilValue } from 'recoil';
+
+import { projectListState } from "~/atoms/projectAtom";
+import { UserState } from "~/atoms/UserAtom";
+
 import { RootView } from "~/components/container";
 import { ProjectContainer } from "~/components/ContentContainer";
-import { projectListState } from "~/atoms/projectAtom";
+
+import { rw, rh, rf } from "~/styles/globalSizes";
+
+import { Project } from "~/types/globalTypes";
+
 
 const ProjectScreen = () => {
     const [projectList, setProjectList] = useRecoilState(projectListState);
+    const User = useRecoilValue(UserState)
 
     // useEffect(() => {
     //     //종료한 프로젝트가 제일 아래에 오게
@@ -31,6 +39,26 @@ const ProjectScreen = () => {
         router.push(`/main/project/${projectName}`);
     }
 
+    const renderItem = ({ item }: { item: Project }) => {
+        if(!item) return;
+
+        const isMember = item.members.find(m => m.name === User.name)
+        if (isMember) {
+            return (
+                <TouchableOpacity onPress={() => moveToProjectDetail(item.name)}>
+                    <ProjectContainer
+                        project_name={item.name}
+                        members={item.members.map(val => val.name)}
+                        isOngoing={item.isOngoing}
+                    />
+                    <View style={styles.space}></View>
+                </TouchableOpacity>
+            )
+        }else{
+            return;
+        }
+    }
+
     return (
         <RootView>
             <Stack.Screen options={{ headerShown: false }} />
@@ -43,16 +71,7 @@ const ProjectScreen = () => {
                 <View>
                     <FlatList
                         data={projectList}
-                        renderItem={({ item }) =>
-                            <TouchableOpacity onPress={() => moveToProjectDetail(item.name)}>
-                                <ProjectContainer
-                                    project_name={item.name}
-                                    members={item.members.map(val => val.name)}
-                                    isOngoing={item.isOngoing}
-                                />
-                                <View style={styles.space}></View>
-                            </TouchableOpacity>
-                        }
+                        renderItem={renderItem}
                     />
                 </View>
                 <TouchableOpacity style={styles.floatingButton} onPress={addProject}>

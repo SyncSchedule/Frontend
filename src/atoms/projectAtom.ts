@@ -38,9 +38,9 @@ export const projectListState = atom<Project[]>({
         { name: "동동이", isLeader: false },
         { name: "동동삼", isLeader: false },
         { name: "동동사", isLeader: false },
-        { name: "김건국", isLeader: false },
       ],
       isOngoing: true,
+      code:'1234',
       events: [
         {
           name: "주제 선정",
@@ -64,6 +64,13 @@ export const projectListState = atom<Project[]>({
           date: moment("2023-11-15"),
           start: moment("2023-11-15 13"),
           end: moment("2023-11-15 15"),
+        },
+        {
+          name: "최종 발표 준비",
+          isScheduled: true,
+          date: moment("2023-12-04"),
+          start: moment("2023-12-04 14"),
+          end: moment("2023-12-04 16"),
         }
       ]
     }

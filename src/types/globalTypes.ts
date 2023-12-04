@@ -31,3 +31,8 @@ export type Status = {
   }[];
   isFinished: boolean;
 }
+
+export type User ={
+  name: string;
+  email: string;
+}
