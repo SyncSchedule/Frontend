@@ -37,7 +37,7 @@ const AddProjectScreen = () => {
     const project = {
       name,
       introduction: intro,
-      members:[{ name: User.name, isLeader: true },],
+      members:[{ id: User.id, name: User.name, isLeader: true },],
       isOngoing: true,
       isShowCalendar:true,
       code:uuid.v4().toString(),

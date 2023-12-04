@@ -4,6 +4,7 @@ export type Project = {
   name: string;
   introduction: string;
   members: {
+    id:string;
     name: string;
     isLeader: boolean;
   }[];
@@ -34,6 +35,7 @@ export type Status = {
 }
 
 export type User ={
+  id: string;
   name: string;
   email: string;
 }

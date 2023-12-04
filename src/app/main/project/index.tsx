@@ -40,9 +40,9 @@ const ProjectScreen = () => {
     }
 
     const renderItem = ({ item }: { item: Project }) => {
-        if(!item) return;
+        if (!item) return;
 
-        const isMember = item.members.find(m => m.name === User.name)
+        const isMember = item.members.find(m => m.id === User.id)
         if (isMember) {
             return (
                 <TouchableOpacity onPress={() => moveToProjectDetail(item.name)}>
@@ -54,7 +54,7 @@ const ProjectScreen = () => {
                     <View style={styles.space}></View>
                 </TouchableOpacity>
             )
-        }else{
+        } else {
             return;
         }
     }
@@ -68,7 +68,7 @@ const ProjectScreen = () => {
                     <Text style={[styles.headerTitle]}>프로젝트 목록</Text>
                     <Text style={[styles.headerFilter]}>생성일 순 ∨</Text>
                 </View>
-                <View>
+                <View style={{ flex: 1 }}>
                     <FlatList
                         data={projectList}
                         renderItem={renderItem}

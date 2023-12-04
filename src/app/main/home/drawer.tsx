@@ -38,7 +38,7 @@ export const Drawer = ({ isVisible, onClose }: DrawerType) => {
         //TODO: checkBox에 맞춰 캘린더 프로젝트 보여주도록
         const [isChecked, setChecked] = useState(true);
 
-        const isMember = project.members.find(m => m.name === User.name)
+        const isMember = project.members.find(m => m.id === User.id)
 
         if (isMember) {
             return (
