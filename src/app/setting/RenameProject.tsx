@@ -45,7 +45,7 @@ const RenameProject = () => {
       setProjectList([...updateProjectList])
 
       Alert.alert('프로젝트명이 변경되었습니다.')
-      router.push('/main/project')
+      router.replace('/main/project')
     }
   }
 

@@ -15,6 +15,7 @@ import { LabelTextInput } from '~/components/textInput'
 import { Button } from '~/components/Button'
 import { useRecoilValue } from 'recoil'
 import { projectListState } from '~/atoms/projectAtom'
+import { UserState } from '~/atoms/UserAtom'
 
 const AddScheduleScreen = () => {
   const { project_name } = useLocalSearchParams();
@@ -22,6 +23,7 @@ const AddScheduleScreen = () => {
   const [event, setEvent] = useState<string>("");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const projectList = useRecoilValue(projectListState);
+  const User = useRecoilValue(UserState)
 
   function setEventName(text: string) {
     setEvent(text);
@@ -54,6 +56,8 @@ const AddScheduleScreen = () => {
     }
   }, []);
 
+  
+
   return (
     <RootView>
       <BasicHeader 
@@ -67,7 +71,7 @@ const AddScheduleScreen = () => {
           <View style={{ marginBottom: rh(54) }}>
             <SelectList 
               setSelected={(val: string) => {console.log(val);setProject(val);}}
-              data={projectList.map((val) => ({ key: `${val}`, value: val.name }))}
+              data={projectList.filter(project => project.members.map(val => val.id).includes(User.id)).map(val => ({key: val.name, value: val.name}))}
               save='value'
               search={false}
               placeholder='프로젝트명'

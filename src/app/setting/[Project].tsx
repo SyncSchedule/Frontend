@@ -46,7 +46,7 @@ const ProjectSettingScreen = () => {
                     setProjectList([...newProjectList])
 
                     Alert.alert('프로젝트가 삭제되었습니다.')
-                    router.back()
+                    router.replace('/main/project')
                 }
             },
         ])
@@ -66,7 +66,7 @@ const ProjectSettingScreen = () => {
                         setProjectList([...newProjectList])
 
                         Alert.alert('프로젝트가 종료되었습니다.')
-                        router.back()
+                        router.replace('/main/project')
                     }
                 }
             },

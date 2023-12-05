@@ -15,8 +15,10 @@ import { useRecoilState } from 'recoil';
 import { projectListState } from "~/atoms/projectAtom";
 
 import { RootView } from "~/components/container";
-import { getDayText } from "~/utils/date";
 import { EventContainerHome } from "~/components/ContentContainer";
+import { Drawer } from "~/app/main/home/drawer";
+
+import { getDayText } from "~/utils/date";
 
 import { Event } from "~/types/globalTypes";
 
@@ -24,23 +26,28 @@ import { dWidth, rf, rh, rw } from "~/styles/globalSizes";
 import { fonts } from "~/styles/globalFonts";
 import { colors } from "~/styles/globalColors";
 
+
+
 type EventDateType = {
     event: Event;
     projectName: string;
 }
 
+
 const HomeScreen = () => {
     const refRBSheet = useRef<RBSheet>(null);
+
+    const [projectList, setProjectList] = useRecoilState(projectListState);
+    //console.log('HomeScreen projectList', projectList)
+
+    const [drawerVisible, setDrawerVisible] = useState(false)
 
     const [pickerDate, setPickerDate] = useState<string | undefined>();
     const [selectMonth, setSelectMonth] = useState<Date>(new Date());
     const [selectDate, setSelectDate] = useState<string>(moment(new Date).format('YYYY-MM-DD'))
     //console.log('selectDate', selectDate)
     const [eventDate, setEventDate] = useState<EventDateType[]>([])
-    console.log('eventDate', eventDate)
-
-    const [projectList, setProjectList] = useRecoilState(projectListState);
-    console.log('HomeScreen projectList', projectList)
+    //console.log('eventDate', eventDate)
 
     const [markedDay, setMarkedDay] = useState<Object>({})
     //console.log('markedDay', markedDay)
@@ -103,7 +110,7 @@ const HomeScreen = () => {
     }
 
     const renderItem = ({ item }: any) => {
-        console.log('item', item)
+        //console.log('item', item)
         if (moment(item.event.date).format("YYYY-MM-DD") == selectDate) {
             return (
                 <Pressable onPress={() => router.push({
@@ -126,14 +133,14 @@ const HomeScreen = () => {
         }
     }
 
-
-
     return (
         <RootView>
             <Stack.Screen options={{ headerShown: false }} />
 
             <View style={styles.dateView}>
-                <Feather name="menu" size={rh(30)} color="black" />
+                <Pressable onPress={() => setDrawerVisible(true)}>
+                    <Feather name="menu" size={rh(30)} color="black" />
+                </Pressable>
                 <Pressable onPress={() => refRBSheet.current?.open()} style={{ flexDirection: 'row', alignItems: 'center', marginLeft: rw(8) }}>
                     <Text style={styles.dateText}>{formatDate}</Text>
                     <Ionicons name="md-caret-down-outline" size={rw(16)} color="black" style={{ marginLeft: rw(5) }} />
@@ -162,9 +169,8 @@ const HomeScreen = () => {
                 />
             </View>
 
-            {/* <Button title="일정 정보" onPress={() => router.push(`/main/home/${testSchedule}`)} />
-            <Button title="일정 추가" onPress={() => router.push('/add/schedule')} />
-            <Button title="드로어" onPress={() => router.push('/drawer')} /> */}
+            {/* 드로어 */}
+            <Drawer isVisible={drawerVisible} onClose={() => setDrawerVisible(false)} />
 
             {/* 날짜 선택 bottomSheet */}
             <RBSheet
@@ -247,5 +253,5 @@ const styles = StyleSheet.create({
         right: rw(10),
         bottom: rh(10),
         alignSelf: 'flex-end'
-    }
+    },
 })

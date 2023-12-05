@@ -4,11 +4,13 @@ export type Project = {
   name: string;
   introduction: string;
   members: {
+    id:string;
     name: string;
     isLeader: boolean;
   }[];
   isOngoing: boolean;
-  code?: string;
+  isShowCalendar:boolean;
+  code: string;
   events: Event[]
 }
 
@@ -30,4 +32,10 @@ export type Status = {
     selectedState: boolean[][];
   }[];
   isFinished: boolean;
+}
+
+export type User ={
+  id: string;
+  name: string;
+  email: string;
 }
