@@ -60,14 +60,10 @@ const ScheduleDetailScreen = () => {
 
                         setProjectList([...updateProjectList])
 
-                        Alert.alert('일정 내용이 작성되었습니다.')
+                        Alert.alert('일정이 삭제되었습니다.')
 
                         router.back()
                     }
-
-                    Alert.alert('일정이 삭제되었습니다.')
-
-                    router.back()
                 }
             },
         ])

@@ -130,11 +130,14 @@ const SelectTimeScreen = () => {
         endHour = endHour + 1;
         endMinute = 0;
       }
+
+      const start = moment(date).set({ 'hour': startHour, 'minute': startMinute });
+      const end = moment(date).set({ 'hour': endHour, 'minute': endMinute });
       
       return {
         date, 
-        start: date.set({'hour': startHour, 'minute': startMinute}), 
-        end: date.set({'hour': endHour, 'minute': endMinute})
+        start: start, 
+        end: end
       };
     }
 
