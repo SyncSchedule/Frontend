@@ -1,8 +1,26 @@
 //
 //global layout style
 //
-import { Stack } from "expo-router";
+import { RecoilRoot } from 'recoil'
+import { SafeAreaView, StyleSheet, Platform } from 'react-native';
+import { Stack } from 'expo-router';
 
-export default ()=>{
-    return <Stack />
+import { rh } from '~/styles/globalSizes';
+
+export default () => {
+    return (
+        <RecoilRoot>
+            <SafeAreaView style={styles.container}>
+                <Stack screenOptions={{ headerShown: false }} />
+            </SafeAreaView>
+        </RecoilRoot>
+    )
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingTop: Platform.OS == "android" ? rh(45) : 0,
+      paddingBottom: Platform.OS == "android" ? rh(15) : 0
+    }
+  })

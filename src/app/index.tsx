@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View } from 'react-native'
+import { View, LogBox} from 'react-native'
 import { Redirect } from "expo-router";
 import {
   useFonts,
@@ -27,6 +27,8 @@ export default function Page() {
     Inter_800ExtraBold,
     Inter_900Black,
   });
+
+  LogBox.ignoreAllLogs();
 
 
   if (!fontsLoaded) {
