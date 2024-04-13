@@ -74,7 +74,9 @@ const StatusScreen = () => {
     const renderItem = ({ item }: { item: Status }) => {
         const project = projectList.find(p => p.name === item.project_name);
 
-        const isMember = project!.members.find(m => m.id === User.id)
+        if(!project) return;
+
+        const isMember = project.members.find(m => m.id === User.id)
 
         if (isMember) {
             return (
